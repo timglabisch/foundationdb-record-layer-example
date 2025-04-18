@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'com.google.protobuf' version "0.9.5"
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://ossartifacts.jfrog.io/artifactory/fdb-record-layer/"
+    }
+}
+dependencies {
+    // gradle init put some other stuff here, too...
+    implementation 'org.foundationdb:fdb-record-layer-core:4.2.6.0'
+    implementation 'com.google.protobuf:protobuf-java:3.25.5'
+    implementation 'org.slf4j:slf4j-simple:2.0.17'
+}
+
+protobuf {
+    generatedFilesBaseDir = "${projectDir}/src/main/generated"
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.25.5'
+    }
+}
+
+application {
+    mainClass = 'Demo'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/generated/main/java'
+        }
+    }
+}

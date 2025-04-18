@@ -1,0 +1,14 @@
+# Ignore Gradle project-specific cache directory
+.gradle
+build
+.idea
+build/
+!gradle/wrapper/gradle-wrapper.jar
+*.iml
+.idea/
+.DS_Store
+*.class
+*.log
+src/main/generated/
+*.bak
+*~
