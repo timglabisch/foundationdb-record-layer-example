@@ -22,7 +22,13 @@ enum Color {
   PINK = 4;
 }
 
+message Person {
+  optional int64 order_id = 1;
+  optional string foo = 2;
+}
+
 message UnionDescriptor {
   option (com.apple.foundationdb.record.record).usage = UNION;
   optional Order _Order = 1;
+  optional Person _Person = 2;
 }
