@@ -29,13 +29,13 @@ public class Demo {
                 .setRecords(RecordLayerDemoProto.getDescriptor());
 
         metaDataBuilder.getRecordType("Order")
-                .setPrimaryKey(Key.Expressions.field("order_id"));
+                .setPrimaryKey(Key.Expressions.concat(Key.Expressions.recordType(), Key.Expressions.field("order_id")));
 
         // metaDataBuilder.addIndex("Order", new Index("priceIndex", Key.Expressions.field("price")));
 
 
         metaDataBuilder.getRecordType("Person")
-                .setPrimaryKey(Key.Expressions.field("order_id"));
+                .setPrimaryKey(Key.Expressions.concat(Key.Expressions.recordType(), Key.Expressions.field("order_id")));
 
         RecordMetaData recordMetaData = metaDataBuilder.build();
 
@@ -79,12 +79,12 @@ public class Demo {
             // load the record
             context.ensureActive().options().setTimeout(600000);
 
-            return recordStoreProvider.apply(context).loadRecord(Tuple.from(1));
+            return recordStoreProvider.apply(context).loadRecord(Tuple.from(recordMetaData.getRecordTypes().get("Person").getRecordTypeKey(), 1));
         });
         assert storedRecord != null;
 // a record that doesn't exist is null
         FDBStoredRecord<Message> shouldNotExist = db.run(context ->
-                recordStoreProvider.apply(context).loadRecord(Tuple.from(99999))
+                recordStoreProvider.apply(context).loadRecord(Tuple.from(recordMetaData.getRecordTypes().get("Person").getRecordTypeKey(), 99999))
         );
         assert shouldNotExist == null;
 
@@ -98,7 +98,7 @@ public class Demo {
          */
 
 
-        /*
+
         db.run(context -> {
             RecordCursor<FDBStoredRecord<Message>> cursor = FDBRecordStore.newBuilder()
                     .setContext(context)
@@ -112,8 +112,6 @@ public class Demo {
             });
             return null;
         });
-
-         */
 
 
         try (FDBDatabaseRunner runner = db.newRunner()) {
